@@ -21,7 +21,7 @@ class MeetingMinute(models.Model):
     minutes = models.TextField()
 
     def __str__(self):
-        return self.meetingID
+        return self.meetingID.meetingTitle + " minutes"
         
     class Meta:
         db_table='meetingMinute'
