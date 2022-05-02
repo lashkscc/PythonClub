@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Products</h2>
+<ul>
+    {% for r in resource_list %}
+        <li>{{ r.resourceName }}</li>
+        {% endfor %}
+</ul>
+
+{% endblock %}
