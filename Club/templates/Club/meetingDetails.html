@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Meeting details</h2>
+
+<p>Meeting title : {{ meeting.meetingTitle }}<br/>
+Meeting Date : {{ meeting.meetingDate }}<br/>
+Meeting Time : {{ meeting.meetingTime }}<br/>
+Meeting Location : {{ meeting.meetingLocation }}<br/>
+Meeting Minutes : {{ minute.minutes|linebreaks }} 
+
+{% endblock %}
