@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import Meeting, MeetingMinute, Resource, Event
+from .forms import MeetingForm, ResourceForm
 import datetime
 # Create your tests here.
 class MeetingTest(TestCase):
@@ -48,3 +49,42 @@ class EventTest(TestCase):
 
     def test_tablename(self):
         self.assertEqual(str(Event._meta.db_table), 'event')
+
+class NewMeetingFormTest(TestCase):
+    #Valid form data
+    def test_meetingform(self):
+        data={
+                'meetingTitle':'testermeet', 
+                'meetingDate': '2022-05-19', 
+                'meetingTime':'12:00:00', 
+                'meetingLocation':'Home', 
+                'meetingAgenda':'This is an agenda.'
+            }
+        form=MeetingForm(data)
+        self.assertTrue(form.is_valid())
+
+    # def test_meetingForm_invalid(self):
+    #     data={
+    #             'meetingTitle':'testermeet', 
+    #             'meetingDate': '2020-02-02', 
+    #             'meetingTime':'12:00:00', 
+    #             'meetingLocation':'Home', 
+    #             'meetingAgenda':'This is an agenda.'
+    #         }
+    #     form = MeetingForm(data)
+    #     self.assertFalse(form.is_valid())
+
+class NewResourceFormTest(TestCase):
+    #Valid form data
+    def test_resourceform(self):
+        user_pk = User.objects.create_superuser('blah', 'myemail@test.com', ' ')
+        data={
+                'resourceName':'testerresource', 
+                'resourceType': 'cool stuf', 
+                'resourceURL':'http://google.com', 
+                'dateEntered':'2020-02-02', 
+                'posterUser':user_pk,
+                'resourceDescription':'Lorem Ipsum'
+            }
+        form=ResourceForm(data)
+        self.assertTrue(form.is_valid())
