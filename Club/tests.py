@@ -1,8 +1,10 @@
-from django.test import TestCase
+import email
+from django.test import TestCase, Client
 from django.contrib.auth.models import User
 from .models import Meeting, MeetingMinute, Resource, Event
 from .forms import MeetingForm, ResourceForm
 import datetime
+from django.urls import reverse
 # Create your tests here.
 class MeetingTest(TestCase):
     def setUp(self):
@@ -30,7 +32,7 @@ class MeetingMinuteTest(TestCase):
 
 class ResourceTest(TestCase):
     def setUp(self):
-        self.posteruser=User(username='user1')
+        self.posteruser=User.objects.create_user(username='testuser1', password='P@ssw0rd1')
         self.resource=Resource(resourceName="ResourceA", resourceType="TypeA", resourceURL='http://www.google.com', dateEntered=datetime.date(2021, 1, 1), posterUser=self.posteruser, resourceDescription="lorem ipsum")
 
     def test_string(self):
@@ -77,14 +79,35 @@ class NewMeetingFormTest(TestCase):
 class NewResourceFormTest(TestCase):
     #Valid form data
     def test_resourceform(self):
-        user_pk = User.objects.create_superuser('blah', 'myemail@test.com', ' ')
+        self.test_user=User.objects.create_user(username='testuser1', password='P@ssw0rd1')
         data={
                 'resourceName':'testerresource', 
                 'resourceType': 'cool stuf', 
                 'resourceURL':'http://google.com', 
                 'dateEntered':'2020-02-02', 
-                'posterUser':user_pk,
+                'posterUser':self.test_user,
                 'resourceDescription':'Lorem Ipsum'
             }
         form=ResourceForm(data)
         self.assertTrue(form.is_valid())
+
+class New_Resource_Authentication_Test(TestCase):
+    def setup(self):
+        self.test_user=User.objects.create_user(username='testuser1', password='P@ssw0rd1')
+        self.resource=Resource.objects.create(resourceName="ResourceA", resourceType="TypeA", resourceURL='http://www.google.com', dateEntered=datetime.date(2021, 1, 1), posterUser=self.test_user, resourceDescription="lorem ipsum")
+
+    def test_redirect_if_not_logged_in(self):
+        response=self.client.get(reverse('newresource'))
+        self.assertRedirects(response, '/accounts/login/?next=/Club/newresource/')
+
+    # def test_logged_in_uses_correct_template(self):
+    #     login=self.client.login(username='testuser1', password='P@ssw0rd1')
+    #     response=self.client.get(reverse('newresource'))
+    #     self.assertEqual(str(response.context['user']), 'testuser1')
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertTemplateUsed(response, 'Club/newresource.html')
+
+    
+
+
+
