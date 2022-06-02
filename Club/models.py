@@ -17,7 +17,7 @@ class Meeting(models.Model):
 
 class MeetingMinute(models.Model):
     meetingID = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING)
-    attendance = models.ManyToManyField(User, blank=True)
+    attendance = models.ManyToManyField(User)
     minutes = models.TextField()
 
     def __str__(self):

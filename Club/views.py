@@ -17,15 +17,14 @@ def meetings(request):
 
 def meetingDetails(request, id):
     meeting=get_object_or_404(Meeting, pk=id)
-    # date=meeting.meetingDate
-    # time=meeting.meetingTime
-    # locat=meeting.meetingLocation
     minute=MeetingMinute.objects.get(meetingID=meeting.id)
+    attendance=MeetingMinute.objects.only("meetingID", "minutes").only("attendance")
     context={
         'meeting' : meeting,
         'minute': minute,
+        'attendace' : attendance
     }
-    return render(request, 'Club/meetingDetails.html', {'meeting': meeting, 'minute' : minute})
+    return render(request, 'Club/meetingDetails.html', {'meeting': meeting, 'minute' : minute, 'attendace' : attendance})
 
 @login_required
 def newMeeting(request):

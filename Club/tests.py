@@ -100,6 +100,7 @@ class New_Resource_Authentication_Test(TestCase):
         response=self.client.get(reverse('newresource'))
         self.assertRedirects(response, '/accounts/login/?next=/Club/newresource/')
 
+    ##Unable to login, login evaluates to false. 
     # def test_logged_in_uses_correct_template(self):
     #     login=self.client.login(username='testuser1', password='P@ssw0rd1')
     #     response=self.client.get(reverse('newresource'))
